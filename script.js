@@ -10,12 +10,18 @@ const hangManDOll = {
 };
 
 let alpha = 0;
-const words = ["Elephant", "Sunshine", "Bicycle", "Adventure", "Harmony", "Serendipity", "Wanderlust", "Tranquility", "Rainbow", "Delicious"];
+const words = {
+    Easy: ["Cat", "Dog", "Sun", "Cup", "Hat", "Ball", "Book", "Bird", "Moon", "Tree"],
+    Medium: ["Elephant", "Bicycle", "Adventure", "Guitar", "Butterfly", "Rainbow", "Ocean", "Flower", "Apple", "Smile"],
+    Hard: ["Serendipity", "Wanderlust", "Symphony", "Eloquent", "Extravagant", "Ambiguous", "Chrysanthemum", "Paradox", "Phenomenon", "Irreplaceable"],
+};
 
 let word = "";
 let isGuessed = [];
+let dificulty = "";
 
 function start() {
+    localStorage.setItem("score", `${localStorage.getItem("score") || 1}`);
     document.querySelector("#score span").textContent = localStorage.getItem("score") || "??? (NEW)";
 }
 
@@ -25,8 +31,8 @@ function generateKeyboardAndWord(buttonStart, keyboard = document.querySelector(
         keyboard.innerHTML += `<div class="letter centering" onclick="clickLetter('${alps[i]}', this)">${alps[i]}</div>`
     }
     document.body.removeChild(buttonStart.parentNode);
-
-    word = words[parseInt(Math.random() * words.length)];
+    dificulty = Object.keys(words)[(parseInt(localStorage.getItem("score")) - 1) % 3];
+    word = words[dificulty][parseInt(Math.random() * words[dificulty].length)];
     word = word.toUpperCase();
     console.log(word);
 
@@ -55,8 +61,8 @@ function clickLetter(letter, button) {
     const truth = isGuessed.reduce((acc, ele) => {
         return (!ele) ? acc + !ele : acc;
     }, 0);
-    if (truth === Object.keys(hangManDOll).length) {
-        localStorage.setItem("score", `${parseInt(localStorage.getItem("score")) + 1 || 1}`);
+    if (truth === Object.keys(hangManDOll).length) {//when i loose the game, i should reload the page
+        localStorage.setItem("score", `${parseInt(localStorage.getItem("score")) + 1}`); //not +1, wtf am i doing
         alert("Loose");
         location.reload();
     }
