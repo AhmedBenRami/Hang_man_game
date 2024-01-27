@@ -21,7 +21,7 @@ let isGuessed = [];
 let dificulty = "";
 
 function start() {
-    localStorage.setItem("score", `${localStorage.getItem("score") || 1}`);
+    localStorage.setItem("score", `${localStorage.getItem("score") || 0}`);
     document.querySelector("#score span").textContent = localStorage.getItem("score") || "??? (NEW)";
 }
 
